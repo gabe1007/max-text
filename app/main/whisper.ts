@@ -21,7 +21,7 @@ class WhisperManager extends EventEmitter {
     async transcribe(audioPath: string): Promise<TranscriptionResult> {
         return new Promise((resolve, reject) => {
             const config = getConfig();
-            const whisperPath = getWhisperBinaryPath(config.useGpu);
+            const whisperPath = getWhisperBinaryPath();
             const modelPath = this.getModelFilePath(config.whisperModel);
 
             // Check if whisper binary exists

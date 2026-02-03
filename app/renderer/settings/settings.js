@@ -79,14 +79,6 @@ class SettingsController {
             modelSelect.value = this.config.whisperModel;
         }
 
-        // GPU/CPU selection
-        const useGpuRadio = document.getElementById('use-gpu');
-        const useCpuRadio = document.getElementById('use-cpu');
-        if (useGpuRadio && useCpuRadio) {
-            useGpuRadio.checked = this.config.useGpu;
-            useCpuRadio.checked = !this.config.useGpu;
-        }
-
         // Output settings
         const copyCheckbox = document.getElementById('copy-clipboard');
         const historyCheckbox = document.getElementById('save-history');
@@ -138,19 +130,6 @@ class SettingsController {
             <span class="alert-icon">⚠️</span>
             <span>Whisper.cpp não encontrado. Baixe de <a href="https://github.com/ggerganov/whisper.cpp" target="_blank">github.com/ggerganov/whisper.cpp</a></span>
           `;
-                }
-            }
-
-            // Update GPU status
-            const gpuStatusText = document.getElementById('gpu-status-text');
-            const gpuStatus = document.getElementById('gpu-status');
-            if (gpuStatusText && gpuStatus) {
-                if (status.gpuAvailable) {
-                    gpuStatus.className = 'alert alert-success';
-                    gpuStatusText.innerHTML = '<strong>GPU CUDA disponível!</strong> Transcrição será mais rápida.';
-                } else {
-                    gpuStatus.className = 'alert alert-warning';
-                    gpuStatusText.innerHTML = 'GPU CUDA não encontrada. Baixe <a href="https://github.com/ggerganov/whisper.cpp/releases" target="_blank">whisper-cublas</a> para acelerar.';
                 }
             }
 
@@ -264,15 +243,6 @@ class SettingsController {
                 this.saveConfig({ whisperModel: whisperModelSelect.value });
             });
         }
-
-        // GPU/CPU selection
-        const hardwareRadios = document.querySelectorAll('input[name="hardware-accel"]');
-        hardwareRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const useGpu = e.target.value === 'gpu';
-                this.saveConfig({ useGpu });
-            });
-        });
 
         // ---- Output Section ----
 

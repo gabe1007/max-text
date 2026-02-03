@@ -15,7 +15,6 @@ export const DEFAULT_CONFIG: AppConfig = {
     // Whisper
     whisperModel: 'base',
     modelPath: '', // Will be set based on app path
-    useGpu: true, // Default to GPU if available
 
     // Output
     copyToClipboard: true,

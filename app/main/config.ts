@@ -73,47 +73,13 @@ export function getModelsPath(): string {
     return config.modelPath || path.join(app.getPath('userData'), 'models');
 }
 
-export function getWhisperBinaryPath(useGpu: boolean = true): string {
+export function getWhisperBinaryPath(): string {
+    const binName = process.platform === 'win32' ? 'whisper.exe' : 'whisper';
     const isDev = !app.isPackaged;
-    const baseDir = isDev
-        ? path.join(app.getAppPath(), 'resources', 'bin')
-        : path.join(process.resourcesPath, 'bin');
 
-    if (process.platform === 'win32') {
-        // Try GPU binary first if useGpu is true
-        if (useGpu) {
-            const gpuPath = path.join(baseDir, 'whisper-cuda.exe');
-            const fs = require('fs');
-            if (fs.existsSync(gpuPath)) {
-                return gpuPath;
-            }
-            console.log('GPU binary not found, falling back to CPU');
-        }
-        return path.join(baseDir, 'whisper.exe');
+    if (isDev) {
+        return path.join(app.getAppPath(), 'resources', 'bin', binName);
     } else {
-        // Linux
-        if (useGpu) {
-            const gpuPath = path.join(baseDir, 'whisper-cuda');
-            const fs = require('fs');
-            if (fs.existsSync(gpuPath)) {
-                return gpuPath;
-            }
-            console.log('GPU binary not found, falling back to CPU');
-        }
-        return path.join(baseDir, 'whisper');
+        return path.join(process.resourcesPath, 'bin', binName);
     }
-}
-
-// Check if GPU binary is available
-export function isGpuAvailable(): boolean {
-    const isDev = !app.isPackaged;
-    const baseDir = isDev
-        ? path.join(app.getAppPath(), 'resources', 'bin')
-        : path.join(process.resourcesPath, 'bin');
-
-    const gpuBinaryName = process.platform === 'win32' ? 'whisper-cuda.exe' : 'whisper-cuda';
-    const gpuPath = path.join(baseDir, gpuBinaryName);
-
-    const fs = require('fs');
-    return fs.existsSync(gpuPath);
 }

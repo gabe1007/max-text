@@ -12,7 +12,6 @@ export interface AppConfig {
     // Whisper settings
     whisperModel: WhisperModel;
     modelPath: string;
-    useGpu: boolean; // Use GPU acceleration if available
 
     // Output settings
     copyToClipboard: boolean;

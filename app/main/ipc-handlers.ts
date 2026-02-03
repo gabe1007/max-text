@@ -59,11 +59,9 @@ export function setupIPCHandlers(): void {
     });
 
     ipcMain.handle(IPC_CHANNELS.WHISPER_STATUS, () => {
-        const { isGpuAvailable } = require('./config');
         return {
             available: whisperManager.isAvailable(),
             modelsPath: getModelsPath(),
-            gpuAvailable: isGpuAvailable(),
         };
     });
 
