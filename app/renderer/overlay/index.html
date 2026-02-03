@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <title>Max-Text Overlay</title>
+    <link rel="stylesheet" href="overlay.css">
+</head>
+
+<body>
+    <div class="overlay-container">
+        <!-- Status indicator -->
+        <div class="status-bar">
+            <div class="status-indicator" id="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text" id="status-text">Gravando...</span>
+            </div>
+            <div class="timer" id="timer">00:00</div>
+        </div>
+
+        <!-- Audio visualizer -->
+        <div class="visualizer-container">
+            <canvas id="visualizer" width="380" height="40"></canvas>
+        </div>
+
+        <!-- Transcription area -->
+        <div class="transcription-container">
+            <div class="transcription-text" id="transcription">
+                <span class="placeholder">Fale agora...</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="overlay.js"></script>
+</body>
+
+</html>

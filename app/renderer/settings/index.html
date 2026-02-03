@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <title>Max-Text - Configurações</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+
+<body>
+    <div class="settings-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" />
+                    <path d="M10 16L14 20L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <h1>Max-Text</h1>
+            </div>
+            <p class="subtitle">Transcrição de voz offline</p>
+        </header>
+
+        <!-- Navigation tabs -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="hotkey">🎹 Hotkey</button>
+            <button class="tab" data-tab="audio">🎤 Áudio</button>
+            <button class="tab" data-tab="whisper">🤖 Whisper</button>
+            <button class="tab" data-tab="output">📋 Saída</button>
+            <button class="tab" data-tab="future">🚀 Futuro</button>
+        </nav>
+
+        <!-- Tab content -->
+        <main class="content">
+
+            <!-- Hotkey Section -->
+            <section class="tab-content active" id="tab-hotkey">
+                <div class="section-header">
+                    <h2>Configuração de Hotkey</h2>
+                    <p>Configure a tecla de atalho para iniciar a gravação</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Hotkey atual</label>
+                    <div class="hotkey-input">
+                        <input type="text" id="current-hotkey" readonly value="F1">
+                        <button class="btn btn-secondary" id="btn-change-hotkey">Alterar</button>
+                    </div>
+                    <p class="hint" id="hotkey-hint">Pressione a tecla desejada...</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Modo de operação</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="hotkey-mode" value="push-to-talk" checked>
+                            <span class="radio-label">
+                                <strong>Push-to-Talk</strong>
+                                <small>Mantém pressionado para gravar</small>
+                            </span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="hotkey-mode" value="toggle">
+                            <span class="radio-label">
+                                <strong>Toggle</strong>
+                                <small>Pressiona para iniciar/parar</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="alert alert-info" id="hotkey-status">
+                    <span class="alert-icon">ℹ️</span>
+                    <span>Hotkey registrada: <strong id="hotkey-display">F1</strong></span>
+                </div>
+            </section>
+
+            <!-- Audio Section -->
+            <section class="tab-content" id="tab-audio">
+                <div class="section-header">
+                    <h2>Configuração de Áudio</h2>
+                    <p>Selecione e teste seu microfone</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="audio-device">Microfone</label>
+                    <select id="audio-device">
+                        <option value="">Dispositivo padrão</option>
+                    </select>
+                    <button class="btn btn-secondary btn-icon" id="btn-refresh-devices" title="Atualizar lista">
+                        🔄
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label>Teste de microfone</label>
+                    <div class="audio-test">
+                        <button class="btn btn-primary" id="btn-test-mic">🎤 Testar</button>
+                        <div class="audio-meter">
+                            <div class="meter-bar" id="meter-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Status de permissão</label>
+                    <div class="permission-status" id="permission-status">
+                        <span class="status-icon">✅</span>
+                        <span>Permissão concedida</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Whisper Section -->
+            <section class="tab-content" id="tab-whisper">
+                <div class="section-header">
+                    <h2>Configuração do Whisper</h2>
+                    <p>Gerencie os modelos de transcrição</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="whisper-model">Modelo ativo</label>
+                    <select id="whisper-model">
+                        <option value="tiny">Tiny (75 MB) - Mais rápido</option>
+                        <option value="base" selected>Base (142 MB) - Recomendado</option>
+                        <option value="small">Small (466 MB) - Balanceado</option>
+                        <option value="medium">Medium (1.5 GB) - Preciso</option>
+                        <option value="large">Large (2.9 GB) - Mais preciso</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="gpu-section">
+                    <label>Aceleração de Hardware</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="hardware-accel" value="gpu" id="use-gpu">
+                            <span class="radio-label">
+                                <strong>🚀 GPU (CUDA)</strong>
+                                <small>Mais rápido - Requer NVIDIA GPU</small>
+                            </span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="hardware-accel" value="cpu" id="use-cpu">
+                            <span class="radio-label">
+                                <strong>💻 CPU</strong>
+                                <small>Compatível com todos os PCs</small>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="alert alert-info" id="gpu-status" style="margin-top: 12px;">
+                        <span class="alert-icon">ℹ️</span>
+                        <span id="gpu-status-text">Verificando disponibilidade de GPU...</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Modelos instalados</label>
+                    <div class="models-list" id="models-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pasta dos modelos</label>
+                    <div class="path-input">
+                        <input type="text" id="models-path" readonly>
+                        <button class="btn btn-secondary" id="btn-open-models-folder">📂 Abrir</button>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning" id="whisper-status">
+                    <span class="alert-icon">⚠️</span>
+                    <span>Whisper.cpp não encontrado. <a href="#" id="whisper-help-link">Saiba mais</a></span>
+                </div>
+            </section>
+
+            <!-- Output Section -->
+            <section class="tab-content" id="tab-output">
+                <div class="section-header">
+                    <h2>Configuração de Saída</h2>
+                    <p>Configure o que acontece após a transcrição</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="copy-clipboard" checked>
+                        <span>Copiar texto para área de transferência</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="save-history">
+                        <span>Salvar histórico de transcrições</span>
+                    </label>
+                </div>
+
+                <div class="form-group" id="history-section">
+                    <label>Histórico</label>
+                    <div class="history-actions">
+                        <button class="btn btn-secondary" id="btn-view-history">📜 Ver histórico</button>
+                        <button class="btn btn-danger" id="btn-clear-history">🗑️ Limpar</button>
+                    </div>
+                    <div class="history-list" id="history-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Future Section -->
+            <section class="tab-content" id="tab-future">
+                <div class="section-header">
+                    <h2>Recursos Futuros</h2>
+                    <p>Funcionalidades em desenvolvimento</p>
+                </div>
+
+                <div class="future-card disabled">
+                    <div class="future-icon">🧠</div>
+                    <div class="future-info">
+                        <h3>LLM Local</h3>
+                        <p>Processamento de texto com IA local para correção, formatação e comandos de voz.</p>
+                        <span class="badge">Em breve</span>
+                    </div>
+                </div>
+
+                <div class="future-card disabled">
+                    <div class="future-icon">🌐</div>
+                    <div class="future-info">
+                        <h3>Múltiplos Idiomas</h3>
+                        <p>Suporte para detecção automática e transcrição em outros idiomas.</p>
+                        <span class="badge">Planejado</span>
+                    </div>
+                </div>
+
+                <div class="future-card disabled">
+                    <div class="future-icon">⌨️</div>
+                    <div class="future-info">
+                        <h3>Digitação Automática</h3>
+                        <p>Inserir texto transcrito automaticamente no aplicativo ativo.</p>
+                        <span class="badge">Planejado</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span class="version">v1.0.0</span>
+            <span>100% Offline</span>
+        </footer>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+
+</html>

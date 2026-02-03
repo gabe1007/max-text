@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+release/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Config
+config.json
+
+# Whisper models (large files)
+resources/models/*.bin
+
+# Whisper binaries (platform-specific)
+resources/bin/whisper*

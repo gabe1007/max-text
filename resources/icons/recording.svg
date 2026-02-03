@@ -1,0 +1,22 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="url(#bgGradient)"/>
+  
+  <!-- Inner shadow -->
+  <circle cx="128" cy="128" r="100" fill="rgba(0,0,0,0.2)"/>
+  <circle cx="128" cy="128" r="96" fill="url(#bgGradient)"/>
+  
+  <!-- Recording dot -->
+  <circle cx="128" cy="128" r="48" fill="white"/>
+  
+  <!-- Pulse rings -->
+  <circle cx="128" cy="128" r="70" fill="none" stroke="white" stroke-width="3" opacity="0.5"/>
+  <circle cx="128" cy="128" r="85" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+</svg>
