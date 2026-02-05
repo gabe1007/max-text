@@ -11,6 +11,7 @@ Transcreve sua voz para texto em português usando Whisper.cpp, 100% offline.
 - 🎤 **Push-to-Talk** - Segure a hotkey para gravar, solte para transcrever
 - 🔒 **100% Offline** - Nenhum dado enviado para a nuvem
 - ⚡ **Rápido** - Transcrição em tempo real com Whisper.cpp
+- 🚀 **Aceleração GPU** - Suporte a NVIDIA CUDA (6-9x mais rápido)
 - 🎛️ **Configurável** - Hotkey, modelo Whisper, microfone
 - 🌐 **Português** - Otimizado para transcrição em português
 - 📋 **Clipboard** - Texto copiado automaticamente
@@ -63,6 +64,49 @@ npm start
    curl -L -o ~/.config/max-text/models/ggml-base.bin \
      https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin
    ```
+
+### GPU Acceleration (Opcional)
+
+Se você tem uma **GPU NVIDIA**, pode habilitar aceleração por GPU para transcrições 6-9x mais rápidas.
+
+#### Requisitos
+- GPU NVIDIA com Compute Capability 5.0+ (GTX 900 series ou mais recente)
+- [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) instalado
+
+#### Instalação
+
+1. **Baixe os binários CUDA** do [whisper.cpp releases](https://github.com/ggml-org/whisper.cpp/releases):
+   - `whisper-cublas-12.4.0-bin-x64.zip` (recomendado para CUDA 12+)
+   - `whisper-cublas-11.8.0-bin-x64.zip` (para CUDA 11.x)
+
+2. **Extraia e copie** para `resources/bin/`:
+   ```powershell
+   # Arquivos necessários:
+   # whisper-cli.exe → renomear para whisper.exe
+   # whisper.dll
+   # ggml-cuda.dll
+   # ggml-base.dll, ggml-cpu.dll, ggml.dll
+   # cublas64_12.dll, cublasLt64_12.dll, cudart64_12.dll
+   ```
+
+3. **Verifique** que GPU está funcionando:
+   ```powershell
+   .\resources\bin\whisper.exe 2>&1 | Select-String "CUDA"
+   # Deve mostrar: "ggml_cuda_init: found 1 CUDA devices"
+   ```
+
+#### Compatibilidade de GPU
+
+| GPU Series | Compute Capability | Suporte |
+|------------|-------------------|----------|
+| RTX 40xx | 8.9 | ✅ Excelente |
+| RTX 30xx | 8.6 | ✅ Excelente |
+| RTX 20xx | 7.5 | ✅ Muito Bom |
+| GTX 16xx | 7.5 | ✅ Muito Bom |
+| GTX 10xx | 6.1 | ✅ Bom |
+| GTX 9xx | 5.2 | ⚠️ Funciona |
+
+> **Nota:** GPU é opcional. Sem GPU, o app usa CPU automaticamente.
 
 ## 📖 Uso
 
