@@ -12,26 +12,12 @@
 
 <body>
     <div class="overlay-container">
-        <!-- Status indicator -->
-        <div class="status-bar">
-            <div class="status-indicator" id="status-indicator">
-                <span class="status-dot"></span>
-                <span class="status-text" id="status-text">Gravando...</span>
-            </div>
-            <div class="timer" id="timer">00:00</div>
-        </div>
-
-        <!-- Audio visualizer -->
+        <!-- Audio visualizer only -->
         <div class="visualizer-container">
-            <canvas id="visualizer" width="380" height="40"></canvas>
+            <canvas id="visualizer" width="280" height="40"></canvas>
         </div>
-
-        <!-- Transcription area -->
-        <div class="transcription-container">
-            <div class="transcription-text" id="transcription">
-                <span class="placeholder">Fale agora...</span>
-            </div>
-        </div>
+        <!-- Recording indicator dot -->
+        <span class="status-dot"></span>
     </div>
 
     <script src="overlay.js"></script>

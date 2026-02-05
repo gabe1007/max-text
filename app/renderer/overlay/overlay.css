@@ -1,4 +1,4 @@
-/* Overlay window styles */
+/* Overlay window styles - Apple-inspired minimal design */
 
 * {
   margin: 0;
@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   background: transparent;
   overflow: hidden;
   user-select: none;
@@ -15,149 +15,128 @@ body {
 }
 
 .overlay-container {
-  width: 400px;
-  height: 180px;
-  background: linear-gradient(135deg, rgba(20, 20, 30, 0.95) 0%, rgba(30, 30, 45, 0.95) 100%);
+  width: 280px;
+  height: 56px;
+  background: rgba(28, 28, 30, 0.85);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  backdrop-filter: blur(20px);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Status bar */
-.status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.status-indicator {
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(50px) saturate(150%);
+  -webkit-backdrop-filter: blur(50px) saturate(150%);
+  padding: 12px 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 14px;
+
+  /* Smooth entrance animation */
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Recording indicator - Apple-style breathing dot */
 .status-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #ef4444;
-  animation: pulse 1.5s ease-in-out infinite;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  background: #FF453A;
+  flex-shrink: 0;
+  animation: breathe 2s ease-in-out infinite;
+  box-shadow:
+    0 0 0 2px rgba(255, 69, 58, 0.2),
+    0 0 12px rgba(255, 69, 58, 0.4);
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.1); }
+@keyframes breathe {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow:
+      0 0 0 2px rgba(255, 69, 58, 0.2),
+      0 0 12px rgba(255, 69, 58, 0.4);
+  }
+
+  50% {
+    opacity: 0.85;
+    transform: scale(1.15);
+    box-shadow:
+      0 0 0 4px rgba(255, 69, 58, 0.15),
+      0 0 16px rgba(255, 69, 58, 0.5);
+  }
 }
 
 .status-dot.processing {
-  background: #f59e0b;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
-  animation: none;
+  background: #FF9F0A;
+  animation: processingPulse 1s ease-in-out infinite;
+  box-shadow:
+    0 0 0 2px rgba(255, 159, 10, 0.2),
+    0 0 12px rgba(255, 159, 10, 0.4);
+}
+
+@keyframes processingPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .status-dot.done {
-  background: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+  background: #30D158;
   animation: none;
+  box-shadow:
+    0 0 0 2px rgba(48, 209, 88, 0.2),
+    0 0 12px rgba(48, 209, 88, 0.4);
 }
 
-.status-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.timer {
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Visualizer */
+/* Visualizer - Apple-style smooth bars */
 .visualizer-container {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  padding: 4px;
+  flex: 1;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
 #visualizer {
   width: 100%;
-  height: 40px;
+  height: 28px;
   display: block;
-}
-
-/* Transcription */
-.transcription-container {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  padding: 10px 12px;
-  overflow-y: auto;
-  max-height: 70px;
-}
-
-.transcription-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.95);
-  word-wrap: break-word;
-}
-
-.transcription-text .placeholder {
-  color: rgba(255, 255, 255, 0.4);
-  font-style: italic;
-}
-
-.transcription-text .partial {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.transcription-text .final {
-  color: #22c55e;
-}
-
-/* Scrollbar */
-.transcription-container::-webkit-scrollbar {
-  width: 4px;
-}
-
-.transcription-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.transcription-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-}
-
-.transcription-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
 }
 
 /* States */
 .overlay-container.idle {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
-.overlay-container.recording .status-dot {
-  background: #ef4444;
+.overlay-container.done {
+  animation: fadeOutUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.8s;
 }
 
-.overlay-container.processing .status-dot {
-  background: #f59e0b;
-}
-
-.overlay-container.done .status-dot {
-  background: #22c55e;
-  animation: none;
+@keyframes fadeOutUp {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
 }

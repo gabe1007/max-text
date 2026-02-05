@@ -15,13 +15,17 @@ export function createOverlayWindow(): BrowserWindow {
     }
 
     const display = screen.getPrimaryDisplay();
-    const { width: screenWidth } = display.workAreaSize;
+    const { width: screenWidth, height: screenHeight } = display.workAreaSize;
+
+    // Compact overlay size - just for wave visualization
+    const overlayWidth = 280;
+    const overlayHeight = 56;
 
     overlayWindow = new BrowserWindow({
-        width: 400,
-        height: 180,
-        x: screenWidth - 420,
-        y: 20,
+        width: overlayWidth,
+        height: overlayHeight,
+        x: Math.round((screenWidth - overlayWidth) / 2),
+        y: screenHeight - overlayHeight - 40,
         frame: false,
         transparent: true,
         alwaysOnTop: true,
