@@ -81,12 +81,16 @@ export function createSettingsWindow(): BrowserWindow {
     }
 
     settingsWindow = new BrowserWindow({
-        width: 700,
-        height: 600,
-        minWidth: 500,
-        minHeight: 400,
-        title: 'Max-Text - Configurações',
+        width: 740,
+        height: 560,
+        minWidth: 540,
+        minHeight: 420,
+        title: 'Max-Text',
         show: false,
+        icon: path.join(__dirname, '..', '..', '..', 'resources', 'icons', 'icon.png'),
+        titleBarStyle: 'hiddenInset',
+        backgroundColor: '#1c1c1e',
+        vibrancy: 'sidebar',
         webPreferences: {
             preload: path.join(__dirname, '..', 'preload', 'index.js'),
             contextIsolation: true,

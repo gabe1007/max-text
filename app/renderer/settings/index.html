@@ -2,235 +2,300 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
-    <title>Max-Text - Configurações</title>
-    <link rel="stylesheet" href="settings.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>Max-Text — Configurações</title>
+  <link rel="stylesheet" href="settings.css">
 </head>
 
 <body>
-    <div class="settings-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" />
-                    <path d="M10 16L14 20L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-                <h1>Max-Text</h1>
+  <div class="settings-container">
+
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <img src="../../../resources/icons/icon.png" alt="Max-Text" width="36" height="36" style="border-radius: 8px;">
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Max-Text</span>
+          <span class="brand-sub">Transcrição offline</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="hotkey">
+          <span class="nav-icon">⌨️</span>
+          <span class="nav-label">Hotkey</span>
+        </button>
+        <button class="nav-item" data-tab="audio">
+          <span class="nav-icon">🎙️</span>
+          <span class="nav-label">Áudio</span>
+        </button>
+        <button class="nav-item" data-tab="whisper">
+          <span class="nav-icon">🧠</span>
+          <span class="nav-label">Whisper</span>
+        </button>
+        <div class="nav-separator"></div>
+        <button class="nav-item" data-tab="output">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Saída</span>
+        </button>
+        <button class="nav-item" data-tab="future">
+          <span class="nav-icon">🚀</span>
+          <span class="nav-label">Futuro</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="version">v1.0.0</span>
+        <span>100% Offline</span>
+      </div>
+    </aside>
+
+    <!-- ===== Main Content ===== -->
+    <div class="main-content">
+
+      <!-- Dynamic header -->
+      <div class="content-header" id="content-header">
+        <h2 id="section-title">Hotkey</h2>
+        <p id="section-subtitle">Configure a tecla de atalho global</p>
+      </div>
+
+      <div class="content-body">
+
+        <!-- ========== Hotkey ========== -->
+        <section class="tab-content active" id="tab-hotkey">
+
+          <!-- Hotkey binding -->
+          <div class="setting-card">
+            <div class="card-title">Atalho</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Hotkey atual</span>
+                <span class="label-sub">Pressione para gravar</span>
+              </div>
+              <div class="row-control">
+                <input type="text" class="mac-input centered" id="current-hotkey" readonly value="F1">
+                <button class="btn btn-secondary btn-sm" id="btn-change-hotkey">Alterar</button>
+              </div>
             </div>
-            <p class="subtitle">Transcrição de voz offline</p>
-        </header>
+            <p class="hint" id="hotkey-hint" style="padding: 0 16px 10px;">Pressione a tecla desejada…</p>
+          </div>
 
-        <!-- Navigation tabs -->
-        <nav class="tabs">
-            <button class="tab active" data-tab="hotkey">🎹 Hotkey</button>
-            <button class="tab" data-tab="audio">🎤 Áudio</button>
-            <button class="tab" data-tab="whisper">🤖 Whisper</button>
-            <button class="tab" data-tab="output">📋 Saída</button>
-            <button class="tab" data-tab="future">🚀 Futuro</button>
-        </nav>
-
-        <!-- Tab content -->
-        <main class="content">
-
-            <!-- Hotkey Section -->
-            <section class="tab-content active" id="tab-hotkey">
-                <div class="section-header">
-                    <h2>Configuração de Hotkey</h2>
-                    <p>Configure a tecla de atalho para iniciar a gravação</p>
+          <!-- Mode -->
+          <div class="setting-card">
+            <div class="card-title">Modo de operação</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Modo</span>
+              </div>
+              <div class="row-control">
+                <div class="segmented-control">
+                  <button class="segment active" data-mode="push-to-talk">Push‑to‑Talk</button>
+                  <button class="segment" data-mode="toggle">Toggle</button>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div class="form-group">
-                    <label>Hotkey atual</label>
-                    <div class="hotkey-input">
-                        <input type="text" id="current-hotkey" readonly value="F1">
-                        <button class="btn btn-secondary" id="btn-change-hotkey">Alterar</button>
-                    </div>
-                    <p class="hint" id="hotkey-hint">Pressione a tecla desejada...</p>
+          <!-- Status -->
+          <div class="alert alert-info" id="hotkey-status">
+            <span class="alert-icon">ℹ️</span>
+            <span>Hotkey registrada: <strong id="hotkey-display">F1</strong></span>
+          </div>
+        </section>
+
+        <!-- ========== Audio ========== -->
+        <section class="tab-content" id="tab-audio">
+
+          <!-- Device -->
+          <div class="setting-card">
+            <div class="card-title">Dispositivo</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Microfone</span>
+              </div>
+              <div class="row-control" style="gap: 6px;">
+                <select class="mac-select" id="audio-device">
+                  <option value="">Dispositivo padrão</option>
+                </select>
+                <button class="btn btn-secondary btn-icon-only" id="btn-refresh-devices" title="Atualizar">🔄</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test -->
+          <div class="setting-card">
+            <div class="card-title">Teste</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Nível do microfone</span>
+              </div>
+              <div class="row-control" style="flex: 1; max-width: 280px;">
+                <div class="audio-test-row" style="width: 100%;">
+                  <button class="btn btn-primary btn-sm" id="btn-test-mic">Testar</button>
+                  <div class="audio-meter">
+                    <div class="meter-bar" id="meter-bar"></div>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Modo de operação</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="hotkey-mode" value="push-to-talk" checked>
-                            <span class="radio-label">
-                                <strong>Push-to-Talk</strong>
-                                <small>Mantém pressionado para gravar</small>
-                            </span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="hotkey-mode" value="toggle">
-                            <span class="radio-label">
-                                <strong>Toggle</strong>
-                                <small>Pressiona para iniciar/parar</small>
-                            </span>
-                        </label>
-                    </div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Permissão</span>
+              </div>
+              <div class="row-control">
+                <span class="status-badge granted" id="permission-status">✅ Concedida</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== Whisper ========== -->
+        <section class="tab-content" id="tab-whisper">
+
+          <!-- Model -->
+          <div class="setting-card">
+            <div class="card-title">Modelo</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Modelo ativo</span>
+              </div>
+              <div class="row-control">
+                <select class="mac-select" id="whisper-model">
+                  <option value="tiny">Tiny (75 MB)</option>
+                  <option value="base" selected>Base (142 MB)</option>
+                  <option value="small">Small (466 MB)</option>
+                  <option value="medium">Medium (1.5 GB)</option>
+                  <option value="large">Large (2.9 GB)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Installed models -->
+          <div class="setting-card">
+            <div class="card-title">Modelos instalados</div>
+            <div id="models-list">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Path -->
+          <div class="setting-card">
+            <div class="card-title">Diretório</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Pasta dos modelos</span>
+              </div>
+              <div class="row-control" style="flex: 1; max-width: 340px;">
+                <div class="inline-input-group" style="width: 100%;">
+                  <input type="text" class="mac-input mono" id="models-path" readonly>
+                  <button class="btn btn-secondary btn-sm" id="btn-open-models-folder">Abrir</button>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div class="alert alert-info" id="hotkey-status">
-                    <span class="alert-icon">ℹ️</span>
-                    <span>Hotkey registrada: <strong id="hotkey-display">F1</strong></span>
-                </div>
-            </section>
+          <!-- Status -->
+          <div class="alert alert-warning" id="whisper-status">
+            <span class="alert-icon">⚠️</span>
+            <span>Whisper.cpp não encontrado. <a href="#" id="whisper-help-link">Saiba mais</a></span>
+          </div>
+        </section>
 
-            <!-- Audio Section -->
-            <section class="tab-content" id="tab-audio">
-                <div class="section-header">
-                    <h2>Configuração de Áudio</h2>
-                    <p>Selecione e teste seu microfone</p>
-                </div>
+        <!-- ========== Output ========== -->
+        <section class="tab-content" id="tab-output">
 
-                <div class="form-group">
-                    <label for="audio-device">Microfone</label>
-                    <select id="audio-device">
-                        <option value="">Dispositivo padrão</option>
-                    </select>
-                    <button class="btn btn-secondary btn-icon" id="btn-refresh-devices" title="Atualizar lista">
-                        🔄
-                    </button>
-                </div>
+          <div class="setting-card">
+            <div class="card-title">Comportamento</div>
 
-                <div class="form-group">
-                    <label>Teste de microfone</label>
-                    <div class="audio-test">
-                        <button class="btn btn-primary" id="btn-test-mic">🎤 Testar</button>
-                        <div class="audio-meter">
-                            <div class="meter-bar" id="meter-bar"></div>
-                        </div>
-                    </div>
-                </div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Copiar para área de transferência</span>
+                <span class="label-sub">Copia automaticamente ao finalizar</span>
+              </div>
+              <div class="row-control">
+                <label class="toggle">
+                  <input type="checkbox" id="copy-clipboard" checked>
+                  <span class="toggle-track"></span>
+                  <span class="toggle-thumb"></span>
+                </label>
+              </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Status de permissão</label>
-                    <div class="permission-status" id="permission-status">
-                        <span class="status-icon">✅</span>
-                        <span>Permissão concedida</span>
-                    </div>
-                </div>
-            </section>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Salvar histórico</span>
+                <span class="label-sub">Armazena transcrições anteriores</span>
+              </div>
+              <div class="row-control">
+                <label class="toggle">
+                  <input type="checkbox" id="save-history">
+                  <span class="toggle-track"></span>
+                  <span class="toggle-thumb"></span>
+                </label>
+              </div>
+            </div>
+          </div>
 
-            <!-- Whisper Section -->
-            <section class="tab-content" id="tab-whisper">
-                <div class="section-header">
-                    <h2>Configuração do Whisper</h2>
-                    <p>Gerencie os modelos de transcrição</p>
-                </div>
+          <!-- History -->
+          <div class="setting-card" id="history-section">
+            <div class="card-title">Histórico</div>
+            <div style="padding: 10px 16px;">
+              <div class="history-bar">
+                <button class="btn btn-secondary btn-sm" id="btn-view-history">Carregar</button>
+                <button class="btn btn-danger btn-sm" id="btn-clear-history">Limpar</button>
+              </div>
+              <div class="history-list" id="history-list">
+                <div class="history-empty">Nenhum histórico carregado</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                <div class="form-group">
-                    <label for="whisper-model">Modelo ativo</label>
-                    <select id="whisper-model">
-                        <option value="tiny">Tiny (75 MB) - Mais rápido</option>
-                        <option value="base" selected>Base (142 MB) - Recomendado</option>
-                        <option value="small">Small (466 MB) - Balanceado</option>
-                        <option value="medium">Medium (1.5 GB) - Preciso</option>
-                        <option value="large">Large (2.9 GB) - Mais preciso</option>
-                </div>
+        <!-- ========== Future ========== -->
+        <section class="tab-content" id="tab-future">
 
-                <div class="form-group">
-                    <label>Modelos instalados</label>
-                    <div class="models-list" id="models-list">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
+          <div class="setting-card">
+            <div class="future-card disabled">
+              <div class="future-icon">🧠</div>
+              <div class="future-info">
+                <h3>LLM Local</h3>
+                <p>Processamento de texto com IA local para correção, formatação e comandos de voz.</p>
+                <span class="badge">Em breve</span>
+              </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Pasta dos modelos</label>
-                    <div class="path-input">
-                        <input type="text" id="models-path" readonly>
-                        <button class="btn btn-secondary" id="btn-open-models-folder">📂 Abrir</button>
-                    </div>
-                </div>
+            <div class="future-card disabled">
+              <div class="future-icon">🌐</div>
+              <div class="future-info">
+                <h3>Múltiplos Idiomas</h3>
+                <p>Suporte para detecção automática e transcrição em outros idiomas.</p>
+                <span class="badge">Planejado</span>
+              </div>
+            </div>
 
-                <div class="alert alert-warning" id="whisper-status">
-                    <span class="alert-icon">⚠️</span>
-                    <span>Whisper.cpp não encontrado. <a href="#" id="whisper-help-link">Saiba mais</a></span>
-                </div>
-            </section>
+            <div class="future-card disabled">
+              <div class="future-icon">⌨️</div>
+              <div class="future-info">
+                <h3>Digitação Automática</h3>
+                <p>Inserir texto transcrito automaticamente no aplicativo ativo.</p>
+                <span class="badge">Planejado</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-            <!-- Output Section -->
-            <section class="tab-content" id="tab-output">
-                <div class="section-header">
-                    <h2>Configuração de Saída</h2>
-                    <p>Configure o que acontece após a transcrição</p>
-                </div>
+      </div><!-- .content-body -->
+    </div><!-- .main-content -->
+  </div><!-- .settings-container -->
 
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="copy-clipboard" checked>
-                        <span>Copiar texto para área de transferência</span>
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="save-history">
-                        <span>Salvar histórico de transcrições</span>
-                    </label>
-                </div>
-
-                <div class="form-group" id="history-section">
-                    <label>Histórico</label>
-                    <div class="history-actions">
-                        <button class="btn btn-secondary" id="btn-view-history">📜 Ver histórico</button>
-                        <button class="btn btn-danger" id="btn-clear-history">🗑️ Limpar</button>
-                    </div>
-                    <div class="history-list" id="history-list">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Future Section -->
-            <section class="tab-content" id="tab-future">
-                <div class="section-header">
-                    <h2>Recursos Futuros</h2>
-                    <p>Funcionalidades em desenvolvimento</p>
-                </div>
-
-                <div class="future-card disabled">
-                    <div class="future-icon">🧠</div>
-                    <div class="future-info">
-                        <h3>LLM Local</h3>
-                        <p>Processamento de texto com IA local para correção, formatação e comandos de voz.</p>
-                        <span class="badge">Em breve</span>
-                    </div>
-                </div>
-
-                <div class="future-card disabled">
-                    <div class="future-icon">🌐</div>
-                    <div class="future-info">
-                        <h3>Múltiplos Idiomas</h3>
-                        <p>Suporte para detecção automática e transcrição em outros idiomas.</p>
-                        <span class="badge">Planejado</span>
-                    </div>
-                </div>
-
-                <div class="future-card disabled">
-                    <div class="future-icon">⌨️</div>
-                    <div class="future-info">
-                        <h3>Digitação Automática</h3>
-                        <p>Inserir texto transcrito automaticamente no aplicativo ativo.</p>
-                        <span class="badge">Planejado</span>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <span class="version">v1.0.0</span>
-            <span>100% Offline</span>
-        </footer>
-    </div>
-
-    <script src="settings.js"></script>
+  <script src="settings.js"></script>
 </body>
 
 </html>

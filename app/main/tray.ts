@@ -72,22 +72,43 @@ export function setTrayRecording(isRecording: boolean): void {
 
 function getIconPath(): string {
     const resourcesPath = getResourcesPath();
-    const iconName = process.platform === 'win32' ? 'icon.ico' : 'icon.png';
-    return path.join(resourcesPath, 'icons', iconName);
+    const fs = require('fs');
+
+    // Prefer .ico on Windows if available, otherwise fall back to .png
+    if (process.platform === 'win32') {
+        const icoPath = path.join(resourcesPath, 'icons', 'icon.ico');
+        try {
+            fs.accessSync(icoPath);
+            return icoPath;
+        } catch {
+            // .ico not found, fall through to .png
+        }
+    }
+
+    return path.join(resourcesPath, 'icons', 'icon.png');
 }
 
 function getRecordingIconPath(): string {
     const resourcesPath = getResourcesPath();
-    const iconName = process.platform === 'win32' ? 'recording.ico' : 'recording.png';
-    const recordingPath = path.join(resourcesPath, 'icons', iconName);
+    const fs = require('fs');
 
-    // Fallback to regular icon if recording icon doesn't exist
-    try {
-        require('fs').accessSync(recordingPath);
-        return recordingPath;
-    } catch {
-        return getIconPath();
+    // Try .ico first on Windows, then .png
+    const candidates = process.platform === 'win32'
+        ? ['recording.ico', 'recording.png']
+        : ['recording.png'];
+
+    for (const name of candidates) {
+        const candidate = path.join(resourcesPath, 'icons', name);
+        try {
+            fs.accessSync(candidate);
+            return candidate;
+        } catch {
+            // try next
+        }
     }
+
+    // Fallback to regular icon
+    return getIconPath();
 }
 
 function getResourcesPath(): string {
