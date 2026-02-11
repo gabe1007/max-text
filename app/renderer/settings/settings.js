@@ -2,11 +2,11 @@
 // Settings window — Apple-style sidebar controller
 
 const SECTION_META = {
-  hotkey:  { title: 'Hotkey',  subtitle: 'Configure a tecla de atalho global' },
-  audio:   { title: 'Áudio',  subtitle: 'Selecione e teste seu microfone' },
+  hotkey: { title: 'Hotkey', subtitle: 'Configure a tecla de atalho global' },
+  audio: { title: 'Áudio', subtitle: 'Selecione e teste seu microfone' },
   whisper: { title: 'Whisper', subtitle: 'Gerencie os modelos de transcrição' },
-  output:  { title: 'Saída',  subtitle: 'Configure o que acontece após a transcrição' },
-  future:  { title: 'Futuro', subtitle: 'Funcionalidades em desenvolvimento' },
+  output: { title: 'Saída', subtitle: 'Configure o que acontece após a transcrição' },
+  future: { title: 'Futuro', subtitle: 'Funcionalidades em desenvolvimento' },
 };
 
 class SettingsController {
@@ -99,6 +99,10 @@ class SettingsController {
     // Whisper model
     const modelSelect = document.getElementById('whisper-model');
     if (modelSelect) modelSelect.value = this.config.whisperModel;
+
+    // Transcription language
+    const langSelect = document.getElementById('transcription-language');
+    if (langSelect) langSelect.value = this.config.transcriptionLanguage || 'pt';
 
     // Toggle switches
     const copyToggle = document.getElementById('copy-clipboard');
@@ -242,6 +246,13 @@ class SettingsController {
     if (whisperModelSelect) {
       whisperModelSelect.addEventListener('change', () => {
         this.saveConfig({ whisperModel: whisperModelSelect.value });
+      });
+    }
+
+    const langSelect = document.getElementById('transcription-language');
+    if (langSelect) {
+      langSelect.addEventListener('change', () => {
+        this.saveConfig({ transcriptionLanguage: langSelect.value });
       });
     }
 

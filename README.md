@@ -2,7 +2,7 @@
 
 **Offline Speech-to-Text Desktop App** para Windows e Linux.
 
-Transcreve sua voz para texto em português usando Whisper.cpp, 100% offline.
+Transcreve sua voz para texto usando Whisper.cpp, 100% offline. Suporta Português, Inglês, Francês, Alemão, Italiano e Espanhol.
 
 ![Max-Text Screenshot](./docs/screenshot.png)
 
@@ -13,7 +13,7 @@ Transcreve sua voz para texto em português usando Whisper.cpp, 100% offline.
 - ⚡ **Rápido** - Transcrição em tempo real com Whisper.cpp
 - 🚀 **Aceleração GPU** - Suporte a NVIDIA CUDA (6-9x mais rápido)
 - 🎛️ **Configurável** - Hotkey, modelo Whisper, microfone
-- 🌐 **Português** - Otimizado para transcrição em português
+- 🌐 **Multi-idioma** - Português, Inglês, Francês, Alemão, Italiano, Espanhol
 - 📋 **Clipboard** - Texto copiado automaticamente
 
 ## 🚀 Quick Start
@@ -128,6 +128,7 @@ Se você tem uma **GPU NVIDIA**, pode habilitar aceleração por GPU para transc
 - **Modo**: Push-to-Talk ou Toggle
 - **Microfone**: Seleção de dispositivo de entrada
 - **Modelo Whisper**: tiny, base, small, medium, large
+- **Idioma**: Português, Inglês, Francês, Alemão, Italiano, Espanhol
 - **Saída**: Copiar para clipboard, salvar histórico
 
 ## 🏗️ Arquitetura

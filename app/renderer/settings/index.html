@@ -17,7 +17,8 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <div class="brand-icon">
-          <img src="../../../resources/icons/icon.png" alt="Max-Text" width="36" height="36" style="border-radius: 8px;">
+          <img src="../../../resources/icons/icon.png" alt="Max-Text" width="36" height="36"
+            style="border-radius: 8px;">
         </div>
         <div class="brand-text">
           <span class="brand-name">Max-Text</span>
@@ -177,6 +178,27 @@
             </div>
           </div>
 
+          <!-- Language -->
+          <div class="setting-card">
+            <div class="card-title">Idioma da transcrição</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Idioma</span>
+                <span class="label-sub">Idioma de saída do Whisper</span>
+              </div>
+              <div class="row-control">
+                <select class="mac-select" id="transcription-language">
+                  <option value="pt">Português</option>
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
+                  <option value="de">Deutsch</option>
+                  <option value="it">Italiano</option>
+                  <option value="es">Español</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <!-- Installed models -->
           <div class="setting-card">
             <div class="card-title">Modelos instalados</div>
@@ -268,15 +290,6 @@
                 <h3>LLM Local</h3>
                 <p>Processamento de texto com IA local para correção, formatação e comandos de voz.</p>
                 <span class="badge">Em breve</span>
-              </div>
-            </div>
-
-            <div class="future-card disabled">
-              <div class="future-icon">🌐</div>
-              <div class="future-info">
-                <h3>Múltiplos Idiomas</h3>
-                <p>Suporte para detecção automática e transcrição em outros idiomas.</p>
-                <span class="badge">Planejado</span>
               </div>
             </div>
 

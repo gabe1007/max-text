@@ -1,7 +1,7 @@
 // shared/config-schema.ts
 // Default configuration and validation
 
-import { AppConfig, WhisperModel } from './types';
+import { AppConfig, WhisperModel, TranscriptionLanguage } from './types';
 import * as path from 'path';
 
 export const DEFAULT_CONFIG: AppConfig = {
@@ -15,6 +15,7 @@ export const DEFAULT_CONFIG: AppConfig = {
     // Whisper
     whisperModel: 'base',
     modelPath: '', // Will be set based on app path
+    transcriptionLanguage: 'pt',
 
     // Output
     copyToClipboard: true,
@@ -31,6 +32,15 @@ export const WHISPER_MODELS: Record<WhisperModel, { size: string; params: string
     small: { size: '466 MB', params: '244M' },
     medium: { size: '1.5 GB', params: '769M' },
     large: { size: '2.9 GB', params: '1550M' },
+};
+
+export const SUPPORTED_LANGUAGES: Record<TranscriptionLanguage, string> = {
+    pt: 'Português',
+    en: 'English',
+    fr: 'Français',
+    de: 'Deutsch',
+    it: 'Italiano',
+    es: 'Español',
 };
 
 export const SUPPORTED_HOTKEYS = [
@@ -52,12 +62,20 @@ export function validateConfig(config: Partial<AppConfig>): AppConfig {
         whisperModel: isValidModel(config.whisperModel)
             ? config.whisperModel
             : DEFAULT_CONFIG.whisperModel,
+        transcriptionLanguage: isValidLanguage(config.transcriptionLanguage)
+            ? config.transcriptionLanguage
+            : DEFAULT_CONFIG.transcriptionLanguage,
     };
 }
 
 function isValidModel(model: unknown): model is WhisperModel {
     return typeof model === 'string' &&
         ['tiny', 'base', 'small', 'medium', 'large'].includes(model);
+}
+
+function isValidLanguage(lang: unknown): lang is TranscriptionLanguage {
+    return typeof lang === 'string' &&
+        Object.keys(SUPPORTED_LANGUAGES).includes(lang);
 }
 
 export const WHISPER_MODEL_URLS: Record<WhisperModel, string> = {

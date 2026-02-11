@@ -12,6 +12,7 @@ export interface AppConfig {
     // Whisper settings
     whisperModel: WhisperModel;
     modelPath: string;
+    transcriptionLanguage: TranscriptionLanguage;
 
     // Output settings
     copyToClipboard: boolean;
@@ -23,6 +24,8 @@ export interface AppConfig {
 }
 
 export type WhisperModel = 'tiny' | 'base' | 'small' | 'medium' | 'large';
+
+export type TranscriptionLanguage = 'pt' | 'en' | 'fr' | 'de' | 'it' | 'es';
 
 export interface TranscriptionResult {
     text: string;

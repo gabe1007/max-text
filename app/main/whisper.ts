@@ -45,7 +45,7 @@ class WhisperManager extends EventEmitter {
             const args = [
                 '-m', modelPath,
                 '-f', audioPath,
-                '-l', 'pt',       // Portuguese
+                '-l', config.transcriptionLanguage,  // Transcription language
                 '-nt',            // No timestamps
                 '-otxt',          // Output as text
             ];
@@ -119,7 +119,7 @@ class WhisperManager extends EventEmitter {
             const args = [
                 '-m', modelPath,
                 '-f', audioPath,
-                '-l', 'pt',
+                '-l', config.transcriptionLanguage,
                 '-nt',
             ];
 
