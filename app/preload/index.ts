@@ -99,6 +99,10 @@ const api = {
         return ipcRenderer.invoke(IPC_CHANNELS.WHISPER_STATUS);
     },
 
+    getSherpaStatus: (): Promise<{ available: boolean; modelInstalled: boolean }> => {
+        return ipcRenderer.invoke('sherpa:status');
+    },
+
     // ============ Windows ============
 
     showOverlay: (): void => {

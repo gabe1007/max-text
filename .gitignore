@@ -24,8 +24,5 @@ config.json
 resources/models/*.bin
 
 # Whisper binaries (platform-specific, download separately)
-resources/bin/whisper*
-resources/bin/*.exe
-resources/bin/*.dll
-resources/bin/backup-cpu/
+resources/bin/
 

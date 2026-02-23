@@ -9,10 +9,16 @@ export interface AppConfig {
     // Audio settings
     audioDeviceId: string | null;
 
+    // Transcription engine
+    transcriptionEngine: TranscriptionEngine;
+
     // Whisper settings
     whisperModel: WhisperModel;
     modelPath: string;
     transcriptionLanguage: TranscriptionLanguage;
+
+    // GPU settings
+    useGpu: boolean;
 
     // Output settings
     copyToClipboard: boolean;
@@ -22,6 +28,8 @@ export interface AppConfig {
     llmEnabled: boolean;
     llmModel: string | null;
 }
+
+export type TranscriptionEngine = 'whisper' | 'parakeet';
 
 export type WhisperModel = 'tiny' | 'base' | 'small' | 'medium' | 'large';
 

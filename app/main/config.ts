@@ -78,8 +78,23 @@ export function getWhisperBinaryPath(): string {
     const isDev = !app.isPackaged;
 
     if (isDev) {
-        return path.join(app.getAppPath(), 'resources', 'bin', binName);
+        return path.join(app.getAppPath(), 'resources', 'bin', 'whisper', binName);
     } else {
-        return path.join(process.resourcesPath, 'bin', binName);
+        return path.join(process.resourcesPath, 'bin', 'whisper', binName);
     }
+}
+
+export function getSherpaOnnxBinaryPath(): string {
+    const binName = process.platform === 'win32' ? 'sherpa-onnx-offline.exe' : 'sherpa-onnx-offline';
+    const isDev = !app.isPackaged;
+
+    if (isDev) {
+        return path.join(app.getAppPath(), 'resources', 'bin', 'sherpa', binName);
+    } else {
+        return path.join(process.resourcesPath, 'bin', 'sherpa', binName);
+    }
+}
+
+export function getSherpaModelsPath(): string {
+    return path.join(getModelsPath(), 'parakeet-0.6b');
 }

@@ -14,6 +14,7 @@ import {
     getModelsPath
 } from './config';
 import { whisperManager, ensureModelsDirectory } from './whisper';
+import { sherpaManager, ensureSherpaModelsDirectory } from './sherpa';
 import { hotkeyManager } from './hotkey';
 import { showOverlay, hideOverlay, showSettingsWindow, sendToOverlay, sendToAll } from './windows';
 
@@ -62,6 +63,16 @@ export function setupIPCHandlers(): void {
         return {
             available: whisperManager.isAvailable(),
             modelsPath: getModelsPath(),
+        };
+    });
+
+    // ============ Sherpa / Parakeet ============
+
+    ipcMain.handle('sherpa:status', () => {
+        ensureSherpaModelsDirectory();
+        return {
+            available: sherpaManager.isAvailable(),
+            modelInstalled: sherpaManager.isModelInstalled(),
         };
     });
 
@@ -133,7 +144,9 @@ export function setupRecordingHandlers(): void {
     // Receive audio chunks from renderer
     ipcMain.on(IPC_CHANNELS.AUDIO_CHUNK, async (_, audioBuffer: ArrayBuffer, tempPath: string) => {
         try {
-            const result = await whisperManager.transcribe(tempPath);
+            const config = getConfig();
+            const manager = config.transcriptionEngine === 'parakeet' ? sherpaManager : whisperManager;
+            const result = await manager.transcribe(tempPath);
             sendToOverlay(IPC_CHANNELS.TRANSCRIPTION_PARTIAL, result);
         } catch (error) {
             console.error('Transcription error:', error);
@@ -181,8 +194,10 @@ export function setupRecordingHandlers(): void {
                 }
 
                 try {
-                    // Run whisper transcription
-                    const result = await whisperManager.transcribe(audioPath);
+                    // Run transcription with active engine
+                    const config = getConfig();
+                    const manager = config.transcriptionEngine === 'parakeet' ? sherpaManager : whisperManager;
+                    const result = await manager.transcribe(audioPath);
                     console.log('Transcription result:', result.text);
 
                     // Send result back to overlay and handle output

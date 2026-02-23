@@ -4,7 +4,7 @@
 const SECTION_META = {
   hotkey: { title: 'Hotkey', subtitle: 'Configure a tecla de atalho global' },
   audio: { title: 'Áudio', subtitle: 'Selecione e teste seu microfone' },
-  whisper: { title: 'Whisper', subtitle: 'Gerencie os modelos de transcrição' },
+  whisper: { title: 'Transcrição', subtitle: 'Configure o motor e modelos de transcrição' },
   output: { title: 'Saída', subtitle: 'Configure o que acontece após a transcrição' },
   future: { title: 'Futuro', subtitle: 'Funcionalidades em desenvolvimento' },
 };
@@ -20,6 +20,7 @@ class SettingsController {
 
     this.setupNavigation();
     this.setupSegmentedControl();
+    this.setupEngineSelector();
     this.setupListeners();
     this.loadInitialData();
   }
@@ -59,7 +60,7 @@ class SettingsController {
   // ============ Segmented Control ============
 
   setupSegmentedControl() {
-    const segments = document.querySelectorAll('.segmented-control .segment');
+    const segments = document.querySelectorAll('.segmented-control:not(#engine-selector) .segment');
     segments.forEach(seg => {
       seg.addEventListener('click', () => {
         segments.forEach(s => s.classList.remove('active'));
@@ -69,6 +70,32 @@ class SettingsController {
         if (mode) this.saveConfig({ hotkeyMode: mode });
       });
     });
+  }
+
+  // ============ Engine Selector ============
+
+  setupEngineSelector() {
+    const engineSegments = document.querySelectorAll('#engine-selector .segment');
+    engineSegments.forEach(seg => {
+      seg.addEventListener('click', () => {
+        engineSegments.forEach(s => s.classList.remove('active'));
+        seg.classList.add('active');
+
+        const engine = seg.getAttribute('data-engine');
+        if (engine) {
+          this.saveConfig({ transcriptionEngine: engine });
+          this.updateEngineVisibility(engine);
+        }
+      });
+    });
+  }
+
+  updateEngineVisibility(engine) {
+    const whisperSettings = document.getElementById('whisper-settings');
+    const parakeetSettings = document.getElementById('parakeet-settings');
+
+    if (whisperSettings) whisperSettings.style.display = engine === 'whisper' ? '' : 'none';
+    if (parakeetSettings) parakeetSettings.style.display = engine === 'parakeet' ? '' : 'none';
   }
 
   // ============ Load Data ============
@@ -82,6 +109,7 @@ class SettingsController {
       this.updateHotkeyDisplay(hotkeyInfo.hotkey, hotkeyInfo.mode);
 
       await this.loadWhisperStatus();
+      await this.loadSherpaStatus();
       await this.loadAppStatus();
       await this.loadAudioDevices();
     } catch (error) {
@@ -91,10 +119,17 @@ class SettingsController {
 
   updateUIFromConfig() {
     // Segmented control for hotkey mode
-    const segments = document.querySelectorAll('.segmented-control .segment');
+    const segments = document.querySelectorAll('.segmented-control:not(#engine-selector) .segment');
     segments.forEach(seg => {
       seg.classList.toggle('active', seg.getAttribute('data-mode') === this.config.hotkeyMode);
     });
+
+    // Engine selector
+    const engineSegments = document.querySelectorAll('#engine-selector .segment');
+    engineSegments.forEach(seg => {
+      seg.classList.toggle('active', seg.getAttribute('data-engine') === this.config.transcriptionEngine);
+    });
+    this.updateEngineVisibility(this.config.transcriptionEngine || 'whisper');
 
     // Whisper model
     const modelSelect = document.getElementById('whisper-model');
@@ -107,8 +142,10 @@ class SettingsController {
     // Toggle switches
     const copyToggle = document.getElementById('copy-clipboard');
     const historyToggle = document.getElementById('save-history');
+    const gpuToggle = document.getElementById('use-gpu');
     if (copyToggle) copyToggle.checked = this.config.copyToClipboard;
     if (historyToggle) historyToggle.checked = this.config.saveHistory;
+    if (gpuToggle) gpuToggle.checked = this.config.useGpu !== false;
   }
 
   updateHotkeyDisplay(hotkey) {
@@ -155,6 +192,42 @@ class SettingsController {
       }
     } catch (error) {
       console.error('Error loading whisper status:', error);
+    }
+  }
+
+  async loadSherpaStatus() {
+    try {
+      const status = await window.api.getSherpaStatus();
+
+      const modelBadge = document.getElementById('parakeet-model-status');
+      const statusAlert = document.getElementById('parakeet-status');
+
+      const hfUrl = 'https://huggingface.co/csukuangfj/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8';
+
+      if (modelBadge) {
+        if (status.modelInstalled) {
+          modelBadge.className = 'status-badge granted';
+          modelBadge.textContent = '✓ Instalado';
+        } else {
+          modelBadge.className = 'status-badge denied';
+          modelBadge.textContent = '✗ Não instalado';
+        }
+      }
+
+      if (statusAlert) {
+        if (!status.available) {
+          statusAlert.className = 'alert alert-warning';
+          statusAlert.innerHTML = '<span class="alert-icon">⚠️</span><span>Binário sherpa-onnx não encontrado. Coloque em resources/bin/sherpa/</span>';
+        } else if (!status.modelInstalled) {
+          statusAlert.className = 'alert alert-warning';
+          statusAlert.innerHTML = '<span class="alert-icon">⚠️</span><span>Modelo Parakeet não encontrado. Baixe de <a href="' + hfUrl + '" target="_blank">Hugging Face</a> e coloque na pasta de modelos.</span>';
+        } else {
+          statusAlert.className = 'alert alert-success';
+          statusAlert.innerHTML = '<span class="alert-icon">✅</span><span>Parakeet TDT pronto para transcrição</span>';
+        }
+      }
+    } catch (error) {
+      console.error('Error loading sherpa status:', error);
     }
   }
 
@@ -268,6 +341,13 @@ class SettingsController {
     if (historyToggle) {
       historyToggle.addEventListener('change', () => {
         this.saveConfig({ saveHistory: historyToggle.checked });
+      });
+    }
+
+    const gpuToggle = document.getElementById('use-gpu');
+    if (gpuToggle) {
+      gpuToggle.addEventListener('change', () => {
+        this.saveConfig({ useGpu: gpuToggle.checked });
       });
     }
 

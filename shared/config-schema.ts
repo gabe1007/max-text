@@ -1,8 +1,7 @@
 // shared/config-schema.ts
 // Default configuration and validation
 
-import { AppConfig, WhisperModel, TranscriptionLanguage } from './types';
-import * as path from 'path';
+import { AppConfig, WhisperModel, TranscriptionLanguage, TranscriptionEngine } from './types';
 
 export const DEFAULT_CONFIG: AppConfig = {
     // Hotkey
@@ -12,10 +11,16 @@ export const DEFAULT_CONFIG: AppConfig = {
     // Audio
     audioDeviceId: null, // null = default device
 
+    // Transcription engine
+    transcriptionEngine: 'whisper',
+
     // Whisper
     whisperModel: 'base',
     modelPath: '', // Will be set based on app path
     transcriptionLanguage: 'pt',
+
+    // GPU
+    useGpu: true,
 
     // Output
     copyToClipboard: true,
@@ -59,6 +64,9 @@ export function validateConfig(config: Partial<AppConfig>): AppConfig {
             ? config.hotkey
             : DEFAULT_CONFIG.hotkey,
         hotkeyMode: config.hotkeyMode === 'toggle' ? 'toggle' : 'push-to-talk',
+        transcriptionEngine: isValidEngine(config.transcriptionEngine)
+            ? config.transcriptionEngine
+            : DEFAULT_CONFIG.transcriptionEngine,
         whisperModel: isValidModel(config.whisperModel)
             ? config.whisperModel
             : DEFAULT_CONFIG.whisperModel,
@@ -66,6 +74,11 @@ export function validateConfig(config: Partial<AppConfig>): AppConfig {
             ? config.transcriptionLanguage
             : DEFAULT_CONFIG.transcriptionLanguage,
     };
+}
+
+function isValidEngine(engine: unknown): engine is TranscriptionEngine {
+    return typeof engine === 'string' &&
+        ['whisper', 'parakeet'].includes(engine);
 }
 
 function isValidModel(model: unknown): model is WhisperModel {

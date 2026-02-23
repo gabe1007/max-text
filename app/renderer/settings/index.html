@@ -37,7 +37,7 @@
         </button>
         <button class="nav-item" data-tab="whisper">
           <span class="nav-icon">🧠</span>
-          <span class="nav-label">Whisper</span>
+          <span class="nav-label">Transcrição</span>
         </button>
         <div class="nav-separator"></div>
         <button class="nav-item" data-tab="output">
@@ -156,35 +156,126 @@
           </div>
         </section>
 
-        <!-- ========== Whisper ========== -->
+        <!-- ========== Whisper / Transcrição ========== -->
         <section class="tab-content" id="tab-whisper">
 
-          <!-- Model -->
+          <!-- Engine Selector -->
           <div class="setting-card">
-            <div class="card-title">Modelo</div>
+            <div class="card-title">Motor de transcrição</div>
             <div class="setting-row">
               <div class="row-label">
-                <span class="label-main">Modelo ativo</span>
+                <span class="label-main">Motor ativo</span>
+                <span class="label-sub">Escolha entre Whisper e Parakeet</span>
               </div>
               <div class="row-control">
-                <select class="mac-select" id="whisper-model">
-                  <option value="tiny">Tiny (75 MB)</option>
-                  <option value="base" selected>Base (142 MB)</option>
-                  <option value="small">Small (466 MB)</option>
-                  <option value="medium">Medium (1.5 GB)</option>
-                  <option value="large">Large (2.9 GB)</option>
-                </select>
+                <div class="segmented-control" id="engine-selector">
+                  <button class="segment active" data-engine="whisper">Whisper</button>
+                  <button class="segment" data-engine="parakeet">Parakeet</button>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Language -->
+          <!-- === Whisper-specific settings === -->
+          <div id="whisper-settings">
+
+            <!-- Model -->
+            <div class="setting-card">
+              <div class="card-title">Modelo</div>
+              <div class="setting-row">
+                <div class="row-label">
+                  <span class="label-main">Modelo ativo</span>
+                </div>
+                <div class="row-control">
+                  <select class="mac-select" id="whisper-model">
+                    <option value="tiny">Tiny (75 MB)</option>
+                    <option value="base" selected>Base (142 MB)</option>
+                    <option value="small">Small (466 MB)</option>
+                    <option value="medium">Medium (1.5 GB)</option>
+                    <option value="large">Large (2.9 GB)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Installed models -->
+            <div class="setting-card">
+              <div class="card-title">Modelos instalados</div>
+              <div id="models-list">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Path -->
+            <div class="setting-card">
+              <div class="card-title">Diretório</div>
+              <div class="setting-row">
+                <div class="row-label">
+                  <span class="label-main">Pasta dos modelos</span>
+                </div>
+                <div class="row-control" style="flex: 1; max-width: 340px;">
+                  <div class="inline-input-group" style="width: 100%;">
+                    <input type="text" class="mac-input mono" id="models-path" readonly>
+                    <button class="btn btn-secondary btn-sm" id="btn-open-models-folder">Abrir</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status -->
+            <div class="alert alert-warning" id="whisper-status">
+              <span class="alert-icon">⚠️</span>
+              <span>Whisper.cpp não encontrado. <a href="#" id="whisper-help-link">Saiba mais</a></span>
+            </div>
+          </div>
+
+          <!-- === Parakeet-specific settings === -->
+          <div id="parakeet-settings" style="display: none;">
+
+            <div class="setting-card">
+              <div class="card-title">Parakeet TDT 0.6B V3</div>
+              <div class="setting-row">
+                <div class="row-label">
+                  <span class="label-main">Motor NVIDIA via sherpa-onnx</span>
+                  <span class="label-sub">25 idiomas • 600M parâmetros • INT8</span>
+                </div>
+                <div class="row-control">
+                  <span class="status-badge unknown" id="parakeet-model-status">Verificando…</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info" id="parakeet-status">
+              <span class="alert-icon">ℹ️</span>
+              <span>Verificando status do Parakeet…</span>
+            </div>
+          </div>
+
+          <!-- GPU toggle -->
+          <div class="setting-card">
+            <div class="card-title">Aceleração</div>
+            <div class="setting-row">
+              <div class="row-label">
+                <span class="label-main">Usar GPU (CUDA)</span>
+                <span class="label-sub">Acelera transcrição via placa de vídeo NVIDIA</span>
+              </div>
+              <div class="row-control">
+                <label class="toggle">
+                  <input type="checkbox" id="use-gpu" checked>
+                  <span class="toggle-track"></span>
+                  <span class="toggle-thumb"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Language (shared by both engines) -->
           <div class="setting-card">
             <div class="card-title">Idioma da transcrição</div>
             <div class="setting-row">
               <div class="row-label">
                 <span class="label-main">Idioma</span>
-                <span class="label-sub">Idioma de saída do Whisper</span>
+                <span class="label-sub">Idioma de saída da transcrição</span>
               </div>
               <div class="row-control">
                 <select class="mac-select" id="transcription-language">
@@ -199,35 +290,6 @@
             </div>
           </div>
 
-          <!-- Installed models -->
-          <div class="setting-card">
-            <div class="card-title">Modelos instalados</div>
-            <div id="models-list">
-              <!-- Populated dynamically -->
-            </div>
-          </div>
-
-          <!-- Path -->
-          <div class="setting-card">
-            <div class="card-title">Diretório</div>
-            <div class="setting-row">
-              <div class="row-label">
-                <span class="label-main">Pasta dos modelos</span>
-              </div>
-              <div class="row-control" style="flex: 1; max-width: 340px;">
-                <div class="inline-input-group" style="width: 100%;">
-                  <input type="text" class="mac-input mono" id="models-path" readonly>
-                  <button class="btn btn-secondary btn-sm" id="btn-open-models-folder">Abrir</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Status -->
-          <div class="alert alert-warning" id="whisper-status">
-            <span class="alert-icon">⚠️</span>
-            <span>Whisper.cpp não encontrado. <a href="#" id="whisper-help-link">Saiba mais</a></span>
-          </div>
         </section>
 
         <!-- ========== Output ========== -->
