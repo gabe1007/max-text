@@ -64,6 +64,34 @@ class OverlayController {
         this.targetHeights = new Array(barCount).fill(2);
     }
 
+    async ensureAudioStream() {
+        if (this.mediaStream && this.mediaStream.active) {
+            // Resume audio context if it was suspended
+            if (this.audioContext && this.audioContext.state === 'suspended') {
+                await this.audioContext.resume();
+            }
+            return;
+        }
+
+        // Acquire microphone stream (slow operation — only done once)
+        this.mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                channelCount: 1,
+                sampleRate: 16000,
+                echoCancellation: true,
+                noiseSuppression: true,
+            }
+        });
+
+        // Setup audio context for visualization
+        this.audioContext = new AudioContext({ sampleRate: 16000 });
+        const source = this.audioContext.createMediaStreamSource(this.mediaStream);
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 128;
+        this.analyser.smoothingTimeConstant = 0.85;
+        source.connect(this.analyser);
+    }
+
     async startRecording() {
         this.isRecording = true;
         this.audioChunks = [];
@@ -71,23 +99,7 @@ class OverlayController {
         this.setStatus('recording');
 
         try {
-            // Get microphone stream
-            this.mediaStream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    channelCount: 1,
-                    sampleRate: 16000,
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                }
-            });
-
-            // Setup audio context for visualization
-            this.audioContext = new AudioContext({ sampleRate: 16000 });
-            const source = this.audioContext.createMediaStreamSource(this.mediaStream);
-            this.analyser = this.audioContext.createAnalyser();
-            this.analyser.fftSize = 128;
-            this.analyser.smoothingTimeConstant = 0.85;
-            source.connect(this.analyser);
+            await this.ensureAudioStream();
 
             this.startVisualization();
             this.startAudioRecording();
@@ -116,18 +128,7 @@ class OverlayController {
             await this.stopAndProcessRecording();
         }
 
-        // Stop media stream
-        if (this.mediaStream) {
-            this.mediaStream.getTracks().forEach(track => track.stop());
-            this.mediaStream = null;
-        }
-
-        // Close audio context
-        if (this.audioContext) {
-            this.audioContext.close();
-            this.audioContext = null;
-            this.analyser = null;
-        }
+        // Keep mediaStream and audioContext alive for fast next start
     }
 
     animateBarsToRest() {

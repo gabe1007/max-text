@@ -9,10 +9,10 @@ import { getConfig } from './config';
 let tray: Tray | null = null;
 
 export function createTray(): Tray {
-    const iconPath = getIconPath();
-    const icon = nativeImage.createFromPath(iconPath);
+    const iconPath = getTrayIconPath();
+    const icon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
 
-    tray = new Tray(icon.resize({ width: 16, height: 16 }));
+    tray = new Tray(icon);
     tray.setToolTip('Max-Text - Speech to Text');
 
     updateTrayMenu();
@@ -63,52 +63,38 @@ export function updateTrayMenu(isRecording: boolean = false): void {
 export function setTrayRecording(isRecording: boolean): void {
     if (!tray) return;
 
-    const iconPath = isRecording ? getRecordingIconPath() : getIconPath();
-    const icon = nativeImage.createFromPath(iconPath);
-    tray.setImage(icon.resize({ width: 16, height: 16 }));
+    const iconPath = isRecording ? getTrayRecordingIconPath() : getTrayIconPath();
+    const icon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
+    tray.setImage(icon);
 
     updateTrayMenu(isRecording);
 }
 
-function getIconPath(): string {
+function getTrayIconPath(): string {
+    const resourcesPath = getResourcesPath();
+    return path.join(resourcesPath, 'icons', 'icon.png');
+}
+
+function getTrayRecordingIconPath(): string {
+    const resourcesPath = getResourcesPath();
+    return path.join(resourcesPath, 'icons', 'recording.png');
+}
+
+export function getAppIconPath(): string {
     const resourcesPath = getResourcesPath();
     const fs = require('fs');
 
-    // Prefer .ico on Windows if available, otherwise fall back to .png
     if (process.platform === 'win32') {
         const icoPath = path.join(resourcesPath, 'icons', 'icon.ico');
         try {
             fs.accessSync(icoPath);
             return icoPath;
         } catch {
-            // .ico not found, fall through to .png
+            // fall through to .png
         }
     }
 
     return path.join(resourcesPath, 'icons', 'icon.png');
-}
-
-function getRecordingIconPath(): string {
-    const resourcesPath = getResourcesPath();
-    const fs = require('fs');
-
-    // Try .ico first on Windows, then .png
-    const candidates = process.platform === 'win32'
-        ? ['recording.ico', 'recording.png']
-        : ['recording.png'];
-
-    for (const name of candidates) {
-        const candidate = path.join(resourcesPath, 'icons', name);
-        try {
-            fs.accessSync(candidate);
-            return candidate;
-        } catch {
-            // try next
-        }
-    }
-
-    // Fallback to regular icon
-    return getIconPath();
 }
 
 function getResourcesPath(): string {
